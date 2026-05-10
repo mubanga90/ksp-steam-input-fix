@@ -1,0 +1,9 @@
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\bin\Release\SteamInputFix.dll
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\bin\Release\SteamInputFix.pdb
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\bin\Release\0Harmony.dll
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\bin\Release\0Harmony.xml
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\obj\Release\SteamInputFix.csproj.AssemblyReference.cache
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\obj\Release\SteamInputFix.csproj.CoreCompileInputs.cache
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\obj\Release\SteamInputFix.csproj.CopyComplete
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\obj\Release\SteamInputFix.dll
+C:\Users\douwe\source\repos\SteamInputFix\SteamInputFix\obj\Release\SteamInputFix.pdb
