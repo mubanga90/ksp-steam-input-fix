@@ -85,24 +85,45 @@ namespace SteamInputFix
 
 	public static class Patches
 	{
-		// Bug: KSPSteamController.GetModeForCurrentContext returns Menu when
-		// FlightUIMode is MANEUVER_INFO. MANEUVER_INFO is just the burn-info
-		// panel — no gizmo is being dragged — so Flight (or Map) controls are
-		// appropriate. Without this fix, after closing a maneuver gizmo the
-		// controller is stuck on menu controls until you leave/re-enter flight.
 		public static void GetModeForCurrentContext_Postfix(ref object __result)
 		{
 			try
 			{
 				if (FlightUIModeController.Instance == null) return;
-				if (FlightUIModeController.Instance.Mode != FlightUIMode.MANEUVER_INFO) return;
-				if (!__result.Equals(SteamInputFixLoader.modeMenu)) return;
-
-				__result = MapView.MapIsEnabled
-					? SteamInputFixLoader.modeMap
-					: SteamInputFixLoader.modeFlight;
+				HandleManeuverNodeBug(ref __result);
+				HandleMapModeBug(ref __result);
 			}
 			catch { /* never let our patch break the game */ }
+		}
+
+
+		// Bug: KSPSteamController.GetModeForCurrentContext returns Menu when
+		// FlightUIMode is MANEUVER_INFO. MANEUVER_INFO is just the burn-info
+		// panel — no gizmo is being dragged — so Flight (or Map) controls are
+		// appropriate. Without this fix, after closing a maneuver gizmo the
+		// controller is stuck on menu controls until you leave/re-enter flight.
+		private static void HandleManeuverNodeBug(ref object __result)
+		{
+			if (FlightUIModeController.Instance.Mode != FlightUIMode.MANEUVER_INFO) return;
+			if (!__result.Equals(SteamInputFixLoader.modeMenu)) return;
+
+			__result = MapView.MapIsEnabled
+					? SteamInputFixLoader.modeMap
+					: SteamInputFixLoader.modeFlight;
+		}
+
+
+		// Bug: For some reason, when entering Map view in flight, the Map controls
+		// are immediately changed to Flight controls. This fix adds a re-check
+		// to set controller mode to Map when map view is on screen.
+		private static void HandleMapModeBug(ref object __result)
+		{
+			if (FlightUIModeController.Instance.Mode != FlightUIMode.STAGING) return;
+			if (!__result.Equals(SteamInputFixLoader.modeFlight)) return;
+
+			__result = MapView.MapIsEnabled
+					? SteamInputFixLoader.modeMap
+					: SteamInputFixLoader.modeFlight;
 		}
 	}
 }
