@@ -74,7 +74,7 @@ namespace SteamInputFix
 					new HarmonyMethod(typeof(Patches), nameof(Patches.GetModeForCurrentContext_Postfix)));
 
 				patched = true;
-				Debug.Log($"{TAG} v1.0 installed: MANEUVER_INFO will use Flight/Map controls instead of Menu.");
+				Debug.Log($"{TAG} v1.0 installed. Fixes: maneuver-node panel keeps Flight/Map controls (was Menu); Map view uses Map controls (was Flight).");
 			}
 			catch (Exception ex)
 			{

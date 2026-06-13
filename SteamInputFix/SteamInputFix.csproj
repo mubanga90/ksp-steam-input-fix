@@ -9,6 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SteamInputFix</RootNamespace>
     <AssemblyName>SteamInputFix</AssemblyName>
+    <ModVersion>1.0</ModVersion>
     <KSP_DIR>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program</KSP_DIR>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -60,5 +61,19 @@
     <MakeDir Directories="$(KSP_DIR)\GameData\SteamInputFix" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(KSP_DIR)\GameData\SteamInputFix" />
     <Message Text="Copied mod to $(KSP_DIR)\GameData\SteamInputFix" Importance="high" />
+  </Target>
+  <Target Name="PackageRelease" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <PropertyGroup>
+      <StageDir>$(OutputPath)release-package</StageDir>
+      <ModStageDir>$(StageDir)\GameData\SteamInputFix</ModStageDir>
+      <ZipPath>$(OutputPath)SteamInputFix-v$(ModVersion).zip</ZipPath>
+    </PropertyGroup>
+    <RemoveDir Directories="$(StageDir)" />
+    <MakeDir Directories="$(ModStageDir)" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModStageDir)" />
+    <Copy SourceFiles="$(MSBuildProjectDirectory)\..\LICENSE.txt" DestinationFolder="$(ModStageDir)" />
+    <Delete Files="$(ZipPath)" />
+    <ZipDirectory SourceDirectory="$(StageDir)" DestinationFile="$(ZipPath)" />
+    <Message Text="Created release package: $(ZipPath)" Importance="high" />
   </Target>
 </Project>
