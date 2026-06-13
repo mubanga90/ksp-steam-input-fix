@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SteamInputFix</RootNamespace>
     <AssemblyName>SteamInputFix</AssemblyName>
-    <ModVersion>1.0</ModVersion>
+    <ModVersion>1.1.0</ModVersion>
     <KSP_DIR>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program</KSP_DIR>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -65,7 +65,7 @@
   <Target Name="PackageRelease" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
     <PropertyGroup>
       <StageDir>$(OutputPath)release-package</StageDir>
-      <ModStageDir>$(StageDir)\GameData\SteamInputFix</ModStageDir>
+      <ModStageDir>$(StageDir)\SteamInputFix</ModStageDir>
       <ZipPath>$(OutputPath)SteamInputFix-v$(ModVersion).zip</ZipPath>
     </PropertyGroup>
     <RemoveDir Directories="$(StageDir)" />
