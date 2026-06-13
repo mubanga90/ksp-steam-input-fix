@@ -15,7 +15,7 @@ namespace SteamInputFix
 		private static bool patched = false;
 
 		public static Type kspControllerModesType;
-		public static object modeMenu, modeFlight, modeMap;
+		public static object modeMenu, modeFlight, modeMap, modeEva;
 
 		void Awake()
 		{
@@ -54,6 +54,8 @@ namespace SteamInputFix
 				try { modeMenu = Enum.Parse(kspControllerModesType, "Menu"); } catch { }
 				try { modeFlight = Enum.Parse(kspControllerModesType, "Flight"); } catch { }
 				try { modeMap = Enum.Parse(kspControllerModesType, "Map"); } catch { }
+				// EVA is optional: the handler self-disables if the value is absent.
+				try { modeEva = Enum.Parse(kspControllerModesType, "EVA"); } catch { }
 
 				if (modeMenu == null || modeFlight == null || modeMap == null)
 				{
@@ -74,7 +76,7 @@ namespace SteamInputFix
 					new HarmonyMethod(typeof(Patches), nameof(Patches.GetModeForCurrentContext_Postfix)));
 
 				patched = true;
-				Debug.Log($"{TAG} v1.0 installed. Fixes: maneuver-node panel keeps Flight/Map controls (was Menu); Map view uses Map controls (was Flight).");
+				Debug.Log($"{TAG} v1.2.0 installed. Fixes: maneuver-node panel keeps Flight/Map controls (was Menu); Map view uses Map controls (was Flight); EVA keeps EVA controls after vessel switching (was Flight).");
 			}
 			catch (Exception ex)
 			{
@@ -92,6 +94,8 @@ namespace SteamInputFix
 				if (FlightUIModeController.Instance == null) return;
 				HandleManeuverNodeBug(ref __result);
 				HandleMapModeBug(ref __result);
+				// Run last so EVA wins over the Flight result other handlers may set.
+				HandleEvaModeBug(ref __result);
 			}
 			catch { /* never let our patch break the game */ }
 		}
@@ -124,6 +128,23 @@ namespace SteamInputFix
 			__result = MapView.MapIsEnabled
 					? SteamInputFixLoader.modeMap
 					: SteamInputFixLoader.modeFlight;
+		}
+
+
+		// Bug: after EVA + map/maneuver-node + vessel switching (issue #4),
+		// GetModeForCurrentContext returns Flight while the active vessel is actually
+		// a Kerbal on EVA. Re-check the active vessel and force EVA controls (or Map
+		// when map view is on screen).
+		private static void HandleEvaModeBug(ref object __result)
+		{
+			if (SteamInputFixLoader.modeEva == null) return;          // EVA enum value not present
+			var vessel = FlightGlobals.ActiveVessel;
+			if (vessel == null || !vessel.isEVA) return;              // not controlling a Kerbal
+			if (!__result.Equals(SteamInputFixLoader.modeFlight)) return; // only fix the Flight regression
+
+			__result = MapView.MapIsEnabled
+					? SteamInputFixLoader.modeMap
+					: SteamInputFixLoader.modeEva;
 		}
 	}
 }
