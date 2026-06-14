@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SteamInputFix</RootNamespace>
     <AssemblyName>SteamInputFix</AssemblyName>
-    <ModVersion>1.2.0</ModVersion>
+    <ModVersion>1.3.0</ModVersion>
     <KSP_DIR>C:\Program Files (x86)\Steam\steamapps\common\Kerbal Space Program</KSP_DIR>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
